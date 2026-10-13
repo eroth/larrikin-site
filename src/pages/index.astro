@@ -116,7 +116,7 @@ import { url } from '../data/url';
 
   // MapLibre is large, so only fetch it once the map is about to scroll into view.
   async function initMap(el: HTMLElement) {
-    const [{ Map, Marker, NavigationControl, setWorkerUrl }, { default: workerUrl }] = await Promise.all([
+    const [{ Map, NavigationControl, setWorkerUrl }, { default: workerUrl }] = await Promise.all([
       import('maplibre-gl'),
       import('maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'),
     ]);
@@ -146,13 +146,6 @@ import { url } from '../data/url';
       map.addLayer({ id: 'hubs-line', type: 'line', source: 'hubs', paint: { 'line-color': '#b4410f', 'line-width': 2 } });
     });
     dark.addEventListener('change', () => map.setStyle(styleUrl()));
-
-    hubs.forEach((h) => {
-      const label = document.createElement('span');
-      label.className = 'hub-label';
-      label.textContent = h.name;
-      new Marker({ element: label }).setLngLat([h.lng, h.lat]).addTo(map);
-    });
   }
 
   if (el?.dataset.hubs) {
