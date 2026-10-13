@@ -50,6 +50,10 @@ header.site .wrap { display: flex; align-items: center; justify-content: space-b
 header.site img { height: 44px; width: auto; display: block; }
 nav { display: flex; gap: 18px; flex-wrap: wrap; font-weight: 600; }
 nav a { color: var(--ink); text-decoration: none; }
+@media (max-width: 599px) {
+  nav { gap: 12px; font-size: 0.9rem; }
+  nav .nav-wide { display: none; } /* keeps the header on one line on portrait phones */
+}
 nav a:hover { color: var(--accent); }
 section { padding: 56px 0; }
 section + section { border-top: 1px solid var(--line); }

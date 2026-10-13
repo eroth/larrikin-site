@@ -25,7 +25,8 @@ const fullTitle = title ? `${title} | ${site.name}` : site.name;
       <div class="wrap">
         <a href={url('/')}><img class="mark" src={url('/logo-mark.png')} alt={site.name} /></a>
         <nav aria-label="Main">
-          <a href={url('/#how')}>How it works</a>
+          <a class="nav-wide" href={url('/#how')}>How it works</a>
+          <a href={url('/#community')}>Community</a>
           <a href={url('/#hubs')}>Hubs</a>
           {site.contactEmail && <a href={url('/#contact')}>Contact</a>}
           {site.appUrl && <a href={site.appUrl}>Member login</a>}

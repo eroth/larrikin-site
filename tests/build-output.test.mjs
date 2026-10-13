@@ -53,6 +53,16 @@ test('contact section and mailto links appear only when an email is configured',
   assert.equal(/href="mailto:/.test(html('index.html')), configured);
 });
 
+test('header nav links only to sections that exist, in page order, and stays short enough for a phone', () => {
+  const doc = html('index.html');
+  const ids = [...doc.matchAll(/<section id="([^"]+)"/g)].map((m) => m[1]);
+  const links = [...doc.match(/<nav[^>]*>([\s\S]*?)<\/nav>/)[1].matchAll(/<a ([^>]*)href="\/#([^"]+)"/g)];
+  const nav = links.map((m) => m[2]);
+  assert.deepEqual(nav, ids.filter((id) => nav.includes(id)));
+  const phone = links.filter((m) => !m[1].includes('nav-wide'));
+  assert.ok(phone.length <= 3, 'more than 3 links wrap onto a second line on a 430px phone; mark extras class="nav-wide"');
+});
+
 test('footer links to terms and privacy on every page', () => {
   for (const file of Object.values(pages)) {
     assert.match(html(file), /href="\/terms"/);
