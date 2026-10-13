@@ -1,0 +1,58 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { site } from '../data/site';
+---
+<Legal title="Terms of Service" description="The rules for using the Larrikin Coffee Collective ordering app and buying group.">
+  <p>
+    These terms cover the {site.name} ("we", "us") ordering app and the group buying that runs
+    through it. By signing in or placing an order you agree to them.
+  </p>
+
+  <h2>What we do</h2>
+  <p>
+    We collect members' orders, combine them into a single wholesale order, and arrange pickup
+    through local hubs. We are not the roaster and we do not roast or pack the coffee.
+  </p>
+
+  <h2>Your account</h2>
+  <p>
+    Keep your details (name, phone and pickup hub) accurate, and don't let anyone else place
+    orders as you. We may remove accounts that misuse the group.
+  </p>
+
+  <h2>Orders</h2>
+  <ul>
+    <li>We open and close each order. Any close time shown is a guide only, and we may close, delay or cancel an order.</li>
+    <li>Prices and availability come from the supplier's catalogue and can change. If an item becomes unavailable it is removed from your order.</li>
+    <li>Once an order has been submitted to the supplier it can't be changed.</li>
+  </ul>
+
+  <h2>Payment</h2>
+  <p>
+    Payment works on an honour system. After an order closes we email you your total. You pay
+    us by bank transfer or cash, then confirm using the link in the email. You agree to pay for
+    everything you order. Any membership or service fee is shown in the app before you commit.
+  </p>
+
+  <h2>Pickup</h2>
+  <p>Orders are collected from your chosen hub.</p>
+
+  <h2>Your consumer rights</h2>
+  <p>
+    Nothing in these terms limits any rights you have under the Australian Consumer Law that
+    can't be excluded.
+  </p>
+
+  <h2>Changes</h2>
+  <p>We may update these terms. The date above shows when they last changed.</p>
+
+  <h2>Governing law</h2>
+  <p>These terms are governed by the laws of Victoria, Australia.</p>
+
+  {site.contactEmail && (
+    <>
+      <h2>Contact</h2>
+      <p>Questions? Email <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.</p>
+    </>
+  )}
+</Legal>

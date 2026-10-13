@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import { site, acknowledgement } from '../data/site';
+import { url } from '../data/url';
+
+interface Props { title?: string; description?: string }
+const { title, description = site.name } = Astro.props;
+const fullTitle = title ? `${title} | ${site.name}` : site.name;
+---
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={url('/logo-lockup.png')} />
+    <link rel="icon" type="image/png" href={url('/favicon.png')} />
+    <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
+  </head>
+  <body>
+    <header class="site">
+      <div class="wrap">
+        <a href={url('/')}><img class="mark" src={url('/logo-mark.png')} alt={site.name} /></a>
+        <nav aria-label="Main">
+          <a href={url('/#how')}>How it works</a>
+          <a href={url('/#hubs')}>Hubs</a>
+          {site.contactEmail && <a href={url('/#contact')}>Contact</a>}
+          {site.appUrl && <a href={site.appUrl}>Member login</a>}
+        </nav>
+      </div>
+    </header>
+    <main><slot /></main>
+    <footer>
+      <div class="wrap">
+        <p class="acknowledgement">{acknowledgement}</p>
+        <span>&copy; {new Date().getFullYear()} {site.name}</span>
+        <span>
+          <a href={url('/terms')}>Terms</a> &middot; <a href={url('/privacy')}>Privacy</a>
+          {site.contactEmail && <> &middot; <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></>}
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>

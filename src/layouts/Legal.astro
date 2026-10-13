@@ -1,0 +1,14 @@
+---
+import Base from './Base.astro';
+import { site } from '../data/site';
+
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+---
+<Base title={title} description={description}>
+  <div class="wrap narrow legal">
+    <h1>{title}</h1>
+    <p><em>Last updated {site.legalUpdated}</em></p>
+    <slot />
+  </div>
+</Base>

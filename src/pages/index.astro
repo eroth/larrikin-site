@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, hubNames } from '../data/site';
+import { url } from '../data/url';
+---
+<Base>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Larrikin: A new kind of coffee collective.</h1>
+        <p class="lede">
+          Members chat about all things coffee, attend events at local roasters, and buy coffee at wholesale rates from their favorite roasters!
+        </p>
+        <div class="row">
+          {site.contactEmail && <a class="btn" href="#contact">Get in touch</a>}
+          {site.appUrl && <a class="btn alt" href={site.appUrl}>Member login</a>}
+        </div>
+      </div>
+      <img src={url('/logo-lockup.png')} alt="Larrikin Coffee Collective: a magpie wearing a backwards baseball cap and holding a mug of coffee" />
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <div class="grid three steps">
+        <div class="card step">
+          <h3>Order</h3>
+          <p>Every fortnight a new order opens in our app. Browse the products and add what you want to your cart.</p>
+        </div>
+        <div class="card step">
+          <h3>Pool</h3>
+          <p>When the order closes, everyone's carts are combined into one group wholesale order.</p>
+        </div>
+        <div class="card step">
+          <h3>Collect</h3>
+          <p>You get an email with your total, pay by bank transfer, and confirm with the "I've paid" link. Then pick up from your hub.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="hubs">
+    <div class="wrap narrow">
+      <h2>Hubs</h2>
+      <p>
+        Members collect their orders from a local hub, each run by a hub captain. We currently
+        have hubs in {hubNames.join(' and ')}.
+      </p>
+    </div>
+  </section>
+
+  {site.contactEmail && (
+    <section id="contact">
+      <div class="wrap narrow">
+        <h2>Get in touch</h2>
+        <p>
+          Interested in buying through the collective, or in starting your own hub? Email
+          <a href={`mailto:${site.contactEmail}`}> {site.contactEmail}</a>.
+        </p>
+      </div>
+    </section>
+  )}
+</Base>
