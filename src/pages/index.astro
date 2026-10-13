@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site, hubNames, roasters } from '../data/site';
+import { site, hubs, hubNames, roasters } from '../data/site';
 import { url } from '../data/url';
 ---
 <Base>
@@ -74,6 +74,10 @@ import { url } from '../data/url';
         Members collect their orders from a local hub, each run by a hub organiser. We currently
         have hubs in {hubNames.join(' and ')}. Interested in starting up a hub? Drop us a line and we'll give you more info!
       </p>
+      <div id="hub-map" class="hub-map" role="img" aria-label={`Map of the approximate areas covered by our hubs in ${hubNames.join(' and ')}`} data-hubs={JSON.stringify(hubs)}>
+        <noscript>The map needs JavaScript. Our hubs are in {hubNames.join(' and ')}.</noscript>
+      </div>
+      <p class="map-note">Circles show the approximate area of each hub, not a pickup address.</p>
     </div>
   </section>
 
@@ -89,3 +93,73 @@ import { url } from '../data/url';
     </section>
   )}
 </Base>
+
+<script>
+  import 'maplibre-gl/dist/maplibre-gl.css';
+
+  type Hub = { name: string; lat: number; lng: number; radiusKm: number };
+  const el = document.getElementById('hub-map');
+
+  // A circle of `radiusKm` around a point, as a GeoJSON polygon (spherical approximation).
+  function circle(h: Hub, steps = 64) {
+    const R = 6371;
+    const lat = (h.lat * Math.PI) / 180;
+    const d = h.radiusKm / R;
+    const ring = Array.from({ length: steps + 1 }, (_, i) => {
+      const brg = (2 * Math.PI * i) / steps;
+      const la = Math.asin(Math.sin(lat) * Math.cos(d) + Math.cos(lat) * Math.sin(d) * Math.cos(brg));
+      const lo = (h.lng * Math.PI) / 180 + Math.atan2(Math.sin(brg) * Math.sin(d) * Math.cos(lat), Math.cos(d) - Math.sin(lat) * Math.sin(la));
+      return [(lo * 180) / Math.PI, (la * 180) / Math.PI];
+    });
+    return { type: 'Feature' as const, properties: {}, geometry: { type: 'Polygon' as const, coordinates: [ring] } };
+  }
+
+  // MapLibre is large, so only fetch it once the map is about to scroll into view.
+  async function initMap(el: HTMLElement) {
+    const [{ Map, Marker, NavigationControl, setWorkerUrl }, { default: workerUrl }] = await Promise.all([
+      import('maplibre-gl'),
+      import('maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'),
+    ]);
+    setWorkerUrl(workerUrl);
+    const hubs: Hub[] = JSON.parse(el.dataset.hubs!);
+    const dark = window.matchMedia('(prefers-color-scheme: dark)');
+    const styleUrl = () => `https://tiles.openfreemap.org/styles/${dark.matches ? 'dark' : 'positron'}`;
+    const map = new Map({ container: el, style: styleUrl(), attributionControl: { compact: true } });
+    map.scrollZoom.disable();
+    map.addControl(new NavigationControl({ showCompass: false }), 'top-left');
+
+    // Fit the view to every circle's bounding box.
+    const dLat = (h: Hub) => (h.radiusKm / 6371) * (180 / Math.PI);
+    const dLng = (h: Hub) => dLat(h) / Math.cos((h.lat * Math.PI) / 180);
+    map.fitBounds(
+      [
+        [Math.min(...hubs.map((h) => h.lng - dLng(h))), Math.min(...hubs.map((h) => h.lat - dLat(h)))],
+        [Math.max(...hubs.map((h) => h.lng + dLng(h))), Math.max(...hubs.map((h) => h.lat + dLat(h)))],
+      ],
+      { padding: 16, animate: false },
+    );
+
+    // Layers vanish when the style changes (light/dark), so add them on every style load.
+    map.on('style.load', () => {
+      map.addSource('hubs', { type: 'geojson', data: { type: 'FeatureCollection', features: hubs.map((h) => circle(h)) } });
+      map.addLayer({ id: 'hubs-fill', type: 'fill', source: 'hubs', paint: { 'fill-color': '#b4410f', 'fill-opacity': 0.2 } });
+      map.addLayer({ id: 'hubs-line', type: 'line', source: 'hubs', paint: { 'line-color': '#b4410f', 'line-width': 2 } });
+    });
+    dark.addEventListener('change', () => map.setStyle(styleUrl()));
+
+    hubs.forEach((h) => {
+      const label = document.createElement('span');
+      label.className = 'hub-label';
+      label.textContent = h.name;
+      new Marker({ element: label }).setLngLat([h.lng, h.lat]).addTo(map);
+    });
+  }
+
+  if (el?.dataset.hubs) {
+    new IntersectionObserver(([entry], observer) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      initMap(el);
+    }, { rootMargin: '400px' }).observe(el);
+  }
+</script>

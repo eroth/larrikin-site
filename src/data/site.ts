@@ -8,7 +8,14 @@ export const site = {
   legalUpdated: '12 October 2026',
 };
 
-export const hubNames = ['Thornbury', 'Northcote'];
+// Map centres are approximate (suburb centres), not pickup addresses. Move them with each
+// hub organiser's agreement; the circle only ever shows a general area.
+export const hubs = [
+  { name: 'Thornbury', lat: -37.757326, lng: 145.010195, radiusKm: 1 },
+  { name: 'Northcote', lat: -37.767999, lng: 144.988416, radiusKm: 1 },
+];
+
+export const hubNames = hubs.map((h) => h.name);
 
 // Roasters shown under "Community". Put each logo in public/roasters/ and list it here;
 // the logos only appear once this has entries. `href` is optional.

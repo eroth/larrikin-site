@@ -1,7 +1,7 @@
 // Run after `astro build`: checks the generated site is complete and has no broken local links.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const dist = new URL('../dist/', import.meta.url).pathname;
@@ -66,6 +66,20 @@ test('footer acknowledges the Traditional Owners and names both hubs on every pa
     assert.match(doc, /Wurundjeri Woi-wurrung people of the Kulin Nation/, `${file} missing acknowledgement`);
     assert.match(doc, /hubs in Thornbury and Northcote sit/, `${file} acknowledgement doesn't name the hubs`);
   }
+});
+
+test('hub map lists every hub, and the privacy page discloses the tile provider', () => {
+  const doc = html('index.html');
+  const data = doc.match(/id="hub-map"[^>]*data-hubs="([^"]+)"/);
+  assert.ok(data, 'hub map missing');
+  const hubs = JSON.parse(data[1].replaceAll('&#34;', '"').replaceAll('&quot;', '"'));
+  assert.deepEqual(hubs.map((h) => h.name), ['Thornbury', 'Northcote']);
+  for (const h of hubs) assert.ok(h.lat < -37 && h.lat > -38 && h.lng > 144 && h.lng < 146 && h.radiusKm > 0, `${h.name} has implausible coordinates`);
+  const entry = readdirSync(join(dist, '_astro')).find((f) => f.startsWith('index.astro_astro_type_script'));
+  assert.ok(statSync(join(dist, '_astro', entry)).size < 20_000, 'map library should load lazily, not in the page entry script');
+  const script = readdirSync(join(dist, '_astro')).filter((f) => f.endsWith('.js')).map((f) => readFileSync(join(dist, '_astro', f), 'utf8')).join('');
+  assert.match(script, /tiles\.openfreemap\.org\/styles\//, 'map style missing');
+  assert.match(html('privacy/index.html'), /OpenFreeMap/);
 });
 
 test('no cookies or third-party scripts (privacy policy says there are none)', () => {

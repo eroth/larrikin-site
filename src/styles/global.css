@@ -70,6 +70,12 @@ section + section { border-top: 1px solid var(--line); }
 .step h3::before { content: counter(step) '. '; color: var(--accent); }
 .steps { counter-reset: step; }
 .tag { color: var(--accent); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.hub-map { height: 340px; margin-top: 24px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); }
+.map-note { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+.hub-label { font-weight: 700; color: #1a1613; text-shadow: 0 0 3px #fff, 0 0 3px #fff; pointer-events: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .hub-label { color: #f1e7d2; text-shadow: 0 0 3px #000, 0 0 3px #000; }
+}
 ul.logos { list-style: none; padding: 0; margin: 24px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
 ul.logos li { display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px; min-height: 110px; }
 ul.logos a { display: flex; }
