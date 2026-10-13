@@ -2,13 +2,17 @@
 export const site = {
   name: 'Larrikin Coffee Collective',
   // Contact buttons and mailto links only appear once this is set.
-  contactEmail: '',
+  contactEmail: 'info@larrikincoffeecollective.com.au',
   // "Member login" link in the header only appears once this is set.
   appUrl: '',
   legalUpdated: '12 October 2026',
 };
 
 export const hubNames = ['Thornbury', 'Northcote'];
+
+// Roasters shown under "Community". Put each logo in public/roasters/ and list it here;
+// the logos only appear once this has entries. `href` is optional.
+export const roasters: { name: string; logo: string; href?: string }[] = [];
 
 // Shown in the footer of every page. Not yet reviewed by the Wurundjeri Woi-wurrung Cultural Heritage Aboriginal Corporation.
 export const acknowledgement =

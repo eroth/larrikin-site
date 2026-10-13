@@ -34,7 +34,17 @@ test('home page covers how it works and names both hubs, but no people', () => {
 });
 
 test('no Discord links', () => {
-  for (const file of Object.values(pages)) assert.doesNotMatch(html(file), /discord/i);
+  for (const file of Object.values(pages)) assert.doesNotMatch(html(file), /(?:href|src)="[^"]*discord/i);
+});
+
+test('roaster logos appear only when configured, each with alt text and an existing file', () => {
+  const configured = [...readFileSync(new URL('../src/data/site.ts', import.meta.url), 'utf8').matchAll(/logo:\s*'([^']+)'/g)];
+  const doc = html('index.html');
+  assert.equal(doc.includes('class="logos"'), configured.length > 0);
+  for (const [, logo] of configured) assert.ok(existsSync(join(dist, logo)), `${logo} missing from build`);
+  for (const [tag] of doc.matchAll(/<ul class="logos"[\s\S]*?<\/ul>/g)) {
+    for (const [img] of tag.matchAll(/<img[^>]*>/g)) assert.match(img, /alt="[^"]+"/);
+  }
 });
 
 test('contact section and mailto links appear only when an email is configured', () => {

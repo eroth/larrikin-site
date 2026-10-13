@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site, hubNames } from '../data/site';
+import { site, hubNames, roasters } from '../data/site';
 import { url } from '../data/url';
 ---
 <Base>
@@ -9,7 +9,7 @@ import { url } from '../data/url';
       <div>
         <h1>Larrikin: A new kind of coffee collective.</h1>
         <p class="lede">
-          Members chat about all things coffee, attend events at local roasters, and buy coffee at wholesale rates from their favorite roasters!
+          Buy coffee at wholesale rates from your favourite local roasters, connect with your neighbours over your shared love for coffee, and learn about beans, equipment, gear, and techniques!
         </p>
         <div class="row">
           {site.contactEmail && <a class="btn" href="#contact">Get in touch</a>}
@@ -34,9 +34,36 @@ import { url } from '../data/url';
         </div>
         <div class="card step">
           <h3>Collect</h3>
-          <p>You get an email with your total, pay by bank transfer, and confirm with the "I've paid" link. Then pick up from your hub.</p>
+          <p>You get an email with your total, pay by bank transfer, and confirm with the "I've paid" link. Then pick up from your local neighbourhood hub.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section id="community">
+    <div class="wrap narrow">
+      <h2>Community</h2>
+      <p>
+        We have a Discord server where we chat about all things coffee and coordinate our coffee orders. We have relationships with the local roasters we order from. We love coffee and are passionate about connecting with those around us who share that love!
+      </p>
+      {roasters.length > 0 && (
+        <>
+          <p>
+            Here are a few of the roasters we've been ordering from lately:
+          </p>
+          <ul class="logos">
+            {roasters.map((r) => (
+              <li>
+                {r.href ? (
+                  <a href={r.href} rel="noopener"><img src={url(r.logo)} alt={r.name} loading="lazy" /></a>
+                ) : (
+                  <img src={url(r.logo)} alt={r.name} loading="lazy" />
+                )}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   </section>
 
@@ -44,8 +71,8 @@ import { url } from '../data/url';
     <div class="wrap narrow">
       <h2>Hubs</h2>
       <p>
-        Members collect their orders from a local hub, each run by a hub captain. We currently
-        have hubs in {hubNames.join(' and ')}.
+        Members collect their orders from a local hub, each run by a hub organiser. We currently
+        have hubs in {hubNames.join(' and ')}. Interested in starting up a hub? Drop us a line and we'll give you more info!
       </p>
     </div>
   </section>
@@ -55,7 +82,7 @@ import { url } from '../data/url';
       <div class="wrap narrow">
         <h2>Get in touch</h2>
         <p>
-          Interested in buying through the collective, or in starting your own hub? Email
+          Interested in joining the collective or in starting your own hub? Email
           <a href={`mailto:${site.contactEmail}`}> {site.contactEmail}</a>.
         </p>
       </div>
