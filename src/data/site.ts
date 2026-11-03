@@ -19,7 +19,12 @@ export const hubNames = hubs.map((h) => h.name);
 
 // Roasters shown under "Community". Put each logo in public/roasters/ and list it here;
 // the logos only appear once this has entries. `href` is optional.
-export const roasters: { name: string; logo: string; href?: string }[] = [];
+export const roasters: { name: string; logo: string; href?: string }[] = [
+  { name: 'Everyday Coffee', logo: '/roasters/everyday.png', href: 'https://everyday-coffee.com/' },
+  { name: 'Code Black Coffee', logo: '/roasters/codeblack.svg', href: 'https://codeblackcoffee.com.au/' },
+  { name: 'Wide Open Road', logo: '/roasters/wideopenroad.png', href: 'https://wideopenroad.com.au/' },
+  { name: 'Proud Mary', logo: '/roasters/proudmary.png', href: 'https://www.proudmarycoffee.com.au/' },
+];
 
 // Shown in the footer of every page. Not yet reviewed by the Wurundjeri Woi-wurrung Cultural Heritage Aboriginal Corporation.
 export const acknowledgement =
