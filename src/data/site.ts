@@ -21,7 +21,6 @@ export const hubNames = hubs.map((h) => h.name);
 // the logos only appear once this has entries. `href` is optional.
 export const roasters: { name: string; logo: string; href?: string }[] = [
   { name: 'Everyday Coffee', logo: '/roasters/everyday.png', href: 'https://everyday-coffee.com/' },
-  { name: 'Code Black Coffee', logo: '/roasters/codeblack.svg', href: 'https://codeblackcoffee.com.au/' },
   { name: 'Wide Open Road', logo: '/roasters/wideopenroad.png', href: 'https://wideopenroad.com.au/' },
   { name: 'Proud Mary', logo: '/roasters/proudmary.png', href: 'https://www.proudmarycoffee.com.au/' },
 ];

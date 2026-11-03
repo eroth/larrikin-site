@@ -7,9 +7,10 @@ import { url } from '../data/url';
   <div class="wrap">
     <div class="hero">
       <div>
-        <h1>Larrikin: A new kind of coffee collective.</h1>
+        <p class="tag">{site.name}</p>
+        <h1>Better coffee, together.</h1>
         <p class="lede">
-          Buy beans from your favourite local roasters, connect with your neighbours over your shared love for coffee, and learn about coffee, equipment, gear, and techniques!
+          Buy coffee with your neighbours. Order from your favourite local roasters in one fortnightly group order, pick up from a hub in your neighbourhood, and meet people who love coffee as much as you do.
         </p>
         <div class="row">
           {site.contactEmail && <a class="btn" href="#contact">Get in touch</a>}
@@ -44,7 +45,7 @@ import { url } from '../data/url';
     <div class="wrap prose">
       <h2>Community</h2>
       <p>
-        We have a Discord server where we chat about all things coffee and coordinate our coffee orders. We have relationships with the local roasters we order from. We love coffee and are passionate about connecting with those around us who share that love!
+        Our members swap brewing tips, share what they're drinking, and coordinate each order in our Discord server. We have relationships with the local roasters we order from. We love coffee and are passionate about connecting with those around us who share that love!
       </p>
       {roasters.length > 0 && (
         <>
