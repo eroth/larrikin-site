@@ -33,8 +33,8 @@ test('home page covers how it works and names both hubs, but no people', () => {
   assert.match(doc, /Thornbury and Northcote/);
 });
 
-test('no Discord links', () => {
-  for (const file of Object.values(pages)) assert.doesNotMatch(html(file), /(?:href|src)="[^"]*discord/i);
+test('no Discord invite links (a link to Discord\'s own privacy policy is fine)', () => {
+  for (const file of Object.values(pages)) assert.doesNotMatch(html(file), /(?:href|src)="[^"]*(?:discord\.gg|discord(?:app)?\.com\/invite)/i);
 });
 
 test('roaster logos appear only when configured, each with alt text and an existing file', () => {
@@ -61,6 +61,35 @@ test('header nav links only to sections that exist, in page order, and stays sho
   assert.deepEqual(nav, ids.filter((id) => nav.includes(id)));
   const phone = links.filter((m) => !m[1].includes('nav-wide'));
   assert.ok(phone.length <= 3, 'more than 3 links wrap onto a second line on a 430px phone; mark extras class="nav-wide"');
+});
+
+test('join chat appears only when an endpoint is configured, and never ships an unfinished form', () => {
+  const configured = /joinEndpoint:\s*'[^']+'/.test(readFileSync(new URL('../src/data/site.ts', import.meta.url), 'utf8'));
+  const doc = html('index.html');
+  assert.equal(/id="join-chat"/.test(doc), configured);
+  assert.equal(/id="join"/.test(doc), configured);
+  assert.equal(/href="#join"/.test(doc), configured);
+});
+
+const siteConfig = () => readFileSync(new URL('../src/data/site.ts', import.meta.url), 'utf8');
+
+test('a live join form always has a Turnstile site key, and the privacy page covers it', () => {
+  const live = /joinEndpoint:\s*'[^']+'/.test(siteConfig());
+  if (live) assert.match(siteConfig(), /turnstileSiteKey:\s*'[^']+'/, 'joinEndpoint is set but turnstileSiteKey is empty: every submission would be rejected');
+  const privacy = html('privacy/index.html');
+  assert.equal(/The join form/.test(privacy), live);
+  assert.equal(/Turnstile/.test(privacy), live);
+  assert.match(privacy, /discord\.com\/privacy/);
+});
+
+test('the only outside hosts the site scripts contact are the map and the bot check', () => {
+  const dir = join(dist, '_astro');
+  const external = readdirSync(dir).filter((f) => f.endsWith('.js')).map((f) => readFileSync(join(dir, f), 'utf8'));
+  const inline = [...html('index.html').matchAll(/<script type="module">([\s\S]*?)<\/script>/g)].map((m) => m[1]); // small scripts are inlined
+  const mine = [...external, ...inline].filter((js) => js.includes('join-chat'));
+  assert.ok(mine.length > 0, 'join chat script missing from build');
+  const hosts = new Set(mine.flatMap((js) => [...js.matchAll(/https?:\/\/([a-z0-9.-]+)/gi)].map((m) => m[1])));
+  assert.deepEqual([...hosts].filter((h) => !['challenges.cloudflare.com'].includes(h)), [], 'unexpected outside host in the join chat script');
 });
 
 test('footer links to terms and privacy on every page', () => {

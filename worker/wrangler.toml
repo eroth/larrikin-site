@@ -1,0 +1,13 @@
+name = "larrikin-join"
+main = "src/index.mjs"
+compatibility_date = "2026-10-01"
+
+# Only the join form on the live site (and optionally local dev) may call this Worker.
+[vars]
+ALLOWED_ORIGIN = "https://larrikincoffeecollective.com.au"
+# DEV_ORIGIN = "http://localhost:4321"
+
+# Secrets are NOT stored here. Set them once with:
+#   npx wrangler secret put DISCORD_WEBHOOK_URL
+#   npx wrangler secret put TURNSTILE_SECRET
+# Route the Worker to your chosen subdomain in the Cloudflare dashboard (Workers > Settings > Domains & Routes).

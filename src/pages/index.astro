@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import { site, hubs, hubNames, roasters } from '../data/site';
 import { url } from '../data/url';
+
+const showJoin = Boolean(site.joinEndpoint) || import.meta.env.DEV;
 ---
 <Base>
   <div class="wrap">
@@ -13,7 +15,8 @@ import { url } from '../data/url';
           Buy coffee with your neighbours. Order from your favourite local roasters in one fortnightly group order, pick up from a hub in your neighbourhood, and meet people who love coffee as much as you do.
         </p>
         <div class="row">
-          {site.contactEmail && <a class="btn" href="#contact">Get in touch</a>}
+          {showJoin && <a class="btn" href="#join">Join us</a>}
+          {site.contactEmail && <a class={showJoin ? 'btn alt' : 'btn'} href="#contact">Get in touch</a>}
           {site.appUrl && <a class="btn alt" href={site.appUrl}>Member login</a>}
         </div>
       </div>
@@ -81,6 +84,27 @@ import { url } from '../data/url';
       <p class="map-note">Circles show the approximate area of each hub, not a pickup address.</p>
     </div>
   </section>
+
+  {showJoin && (
+    <section id="join">
+      <div class="wrap prose">
+        <h2>Join us</h2>
+        <p>Tell us a little about yourself and we'll get you set up with the ordering app and our Discord.</p>
+        <div id="join-chat" class="chat" data-endpoint={site.joinEndpoint} data-hubs={JSON.stringify(hubNames)} data-contact={site.contactEmail} data-turnstile-site-key={site.turnstileSiteKey}>
+          <div class="chat-log" role="log" aria-live="polite" aria-label="Join conversation"></div>
+          <div class="chat-turnstile"></div>
+          <div class="chat-choices" hidden></div>
+          <form class="chat-input" novalidate hidden>
+            <input type="text" name="reply" required />
+            <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <button type="submit" class="btn">Send</button>
+          </form>
+          <noscript><p class="chat-fallback">Joining needs JavaScript.{site.contactEmail && <> Email <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a> instead.</>}</p></noscript>
+        </div>
+        <p class="map-note">This isn't live chat. A person on our team will reply by email.</p>
+      </div>
+    </section>
+  )}
 
   {site.contactEmail && (
     <section id="contact">
@@ -156,4 +180,8 @@ import { url } from '../data/url';
       initMap(el);
     }, { rootMargin: '400px' }).observe(el);
   }
+</script>
+
+<script>
+  import '../scripts/join-chat';
 </script>

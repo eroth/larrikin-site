@@ -1,6 +1,8 @@
 ---
 import Legal from '../layouts/Legal.astro';
 import { site } from '../data/site';
+
+const joinForm = Boolean(site.joinEndpoint);
 ---
 <Legal title="Privacy Policy" description="What personal information the Larrikin Coffee Collective collects and why.">
   <p>
@@ -10,14 +12,38 @@ import { site } from '../data/site';
 
   <h2>This website</h2>
   <p>
-    This website itself doesn't collect personal information. It sets no cookies and has no
-    analytics or advertising trackers. The one exception is the map in the Hubs section, which
-    loads map data from <a href="https://openfreemap.org">OpenFreeMap</a>. Your browser connects
-    to their servers to do that, so they can see your IP address. OpenFreeMap says it doesn't use
-    cookies and its access logs don't contain IP addresses by default; see their
+    This website sets no cookies of its own and has no analytics or advertising trackers.
+    {joinForm
+      ? 'It collects personal information only if you use the join form (described below).'
+      : "It doesn't collect personal information."}
+    The map in the Hubs section loads map data from <a href="https://openfreemap.org">OpenFreeMap</a>.
+    Your browser connects to their servers to do that, so they can see your IP address. OpenFreeMap says
+    it doesn't use cookies and its access logs don't contain IP addresses by default; see their
     <a href="https://openfreemap.org/privacy/">privacy policy</a>. We don't receive or store that
-    information. Everything below is about the ordering app.
+    information.
   </p>
+
+  {joinForm && (
+    <>
+      <h2>The join form</h2>
+      <p>
+        If you use the join form, we collect the name, email address, nearest hub and (optionally)
+        favourite way to drink coffee that you enter. We use them to set you up with the ordering app,
+        invite you to our Discord, and reply to you. The form is handled by a Cloudflare Worker, which
+        passes your answers to a private channel on our Discord server that only our team can see. We
+        don't store them anywhere else. We delete your request from that channel once we've set you up,
+        or sooner if you ask us to.
+      </p>
+      <p>
+        To block bots, the form uses Cloudflare Turnstile. Cloudflare says it processes your IP address,
+        TLS fingerprint, User-Agent header, and the website's key and origin for this; see
+        <a href="https://www.cloudflare.com/turnstile-privacy-policy/">Cloudflare's Turnstile privacy addendum</a>.
+        The Turnstile check loads from Cloudflare only when you reach the join form.
+      </p>
+    </>
+  )}
+
+  <p>Everything else below is about the ordering app.</p>
 
   <h2>What we collect in the ordering app</h2>
   <ul>
@@ -35,7 +61,8 @@ import { site } from '../data/site';
   <h2>Who handles it</h2>
   <p>
     Admins of the app can see members' details, orders and payment status. Sign-in is handled by
-    Cloudflare Access, and our email provider delivers the emails we send you.
+    Cloudflare Access, and our email provider delivers the emails we send you. Our community chat
+    runs on Discord, which handles what you share there under <a href="https://discord.com/privacy">its own privacy policy</a>.
   </p>
 
   <h2>Access and deletion</h2>

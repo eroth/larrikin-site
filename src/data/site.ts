@@ -5,6 +5,10 @@ export const site = {
   contactEmail: 'info@larrikincoffeecollective.com.au',
   // "Member login" link in the header only appears once this is set.
   appUrl: '',
+  // The join chat appears once this is set (a Worker URL that accepts the form). Local preview always shows it.
+  joinEndpoint: '',
+  // Public Cloudflare Turnstile site key for the join form. Required whenever joinEndpoint is set.
+  turnstileSiteKey: '',
   legalUpdated: '12 October 2026',
 };
 
