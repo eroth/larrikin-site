@@ -18,7 +18,7 @@ const joinForm = Boolean(site.joinEndpoint);
       : "It doesn't collect personal information."}
     The map in the Hubs section loads map data from <a href="https://openfreemap.org">OpenFreeMap</a>.
     Your browser connects to their servers to do that, so they can see your IP address. OpenFreeMap says
-    it doesn't use cookies and its access logs don't contain IP addresses by default; see their
+    it doesn't use cookies and its access logs don't contain IP addresses by default; see their{' '}
     <a href="https://openfreemap.org/privacy/">privacy policy</a>. We don't receive or store that
     information.
   </p>
@@ -30,13 +30,14 @@ const joinForm = Boolean(site.joinEndpoint);
         If you use the join form, we collect the name, email address, nearest hub and (optionally)
         favourite way to drink coffee that you enter. We use them to set you up with the ordering app,
         invite you to our Discord, and reply to you. The form is handled by a Cloudflare Worker, which
-        passes your answers to a private channel on our Discord server that only our team can see. We
-        don't store them anywhere else. We delete your request from that channel once we've set you up,
-        or sooner if you ask us to.
+        passes your answers to a private channel on our Discord server that only our team can see. The
+        form doesn't store them anywhere else. We delete your request from that channel once we've set
+        you up, or sooner if you ask us to. Once you're set up, your email address and the other details
+        you give us are kept in the ordering app as described below, and we reply to you by email.
       </p>
       <p>
         To block bots, the form uses Cloudflare Turnstile. Cloudflare says it processes your IP address,
-        TLS fingerprint, User-Agent header, and the website's key and origin for this; see
+        TLS fingerprint, User-Agent header, and the website's key and origin for this; see{' '}
         <a href="https://www.cloudflare.com/turnstile-privacy-policy/">Cloudflare's Turnstile privacy addendum</a>.
         The Turnstile check loads from Cloudflare only when you reach the join form.
       </p>

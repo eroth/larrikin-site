@@ -126,3 +126,11 @@ test('no cookies or third-party scripts (privacy policy says there are none)', (
     assert.doesNotMatch(html(file), /<script[^>]+src="https?:/);
   }
 });
+
+test('a link is never glued to the word before it (Astro drops whitespace at the edge of a line)', () => {
+  for (const file of Object.values(pages)) {
+    const text = html(file).replace(/<script[\s\S]*?<\/script>/g, '');
+    const glued = [...text.matchAll(/[A-Za-z0-9;,.:]<a [^>]*>/g)].map((m) => m[0]);
+    assert.deepEqual(glued, [], `${file} has a link with no space before it; put {' '} before the <a> in the .astro source`);
+  }
+});
