@@ -29,7 +29,7 @@ export const roasters: { name: string; logo: string; href?: string }[] = [
   { name: 'Proud Mary', logo: '/roasters/proudmary.png', href: 'https://www.proudmarycoffee.com.au/' },
 ];
 
-// Shown in the footer of every page. Not yet reviewed by the Wurundjeri Woi-wurrung Cultural Heritage Aboriginal Corporation.
+// Shown in the footer of every page. Standard acknowledgement format; no review by the Wurundjeri Woi-wurrung Cultural Heritage Aboriginal Corporation is needed.
 export const acknowledgement =
   `${site.name} acknowledges the Wurundjeri Woi-wurrung people of the Kulin Nation as the Traditional Owners of the lands on which our hubs in ${hubNames.join(' and ')} sit. ` +
   'We pay our respects to Elders past and present.';
