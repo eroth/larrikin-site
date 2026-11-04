@@ -37,9 +37,11 @@ const joinForm = Boolean(site.joinEndpoint);
       </p>
       <p>
         To block bots, the form uses Cloudflare Turnstile. Cloudflare says it processes your IP address,
-        TLS fingerprint, User-Agent header, and the website's key and origin for this; see{' '}
+        TLS fingerprint, User-Agent header, and the website's key and origin to block bots and to improve its bot detection; see{' '}
         <a href="https://www.cloudflare.com/turnstile-privacy-policy/">Cloudflare's Turnstile privacy addendum</a>.
-        The Turnstile check loads from Cloudflare only when you reach the join form.
+        The Turnstile check loads from Cloudflare only when you reach the join form. We run the form on
+        our website, so if you have a question about how Turnstile handles your data
+        {site.contactEmail ? <>, you can email <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.</> : ', you can ask us.'}
       </p>
     </>
   )}

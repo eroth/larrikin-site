@@ -9,7 +9,7 @@ export const site = {
   joinEndpoint: 'https://join.larrikincoffeecollective.com.au/',
   // Public Cloudflare Turnstile site key for the join form. Required whenever joinEndpoint is set.
   turnstileSiteKey: '0x4AAAAAAFy8WhxEg86lSCsS',
-  legalUpdated: '12 October 2026',
+  legalUpdated: '4 November 2026',
 };
 
 // Map centres are approximate (suburb centres), not pickup addresses. Move them with each
