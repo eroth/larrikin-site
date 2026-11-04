@@ -2,6 +2,9 @@ name = "larrikin-join"
 main = "src/index.mjs"
 compatibility_date = "2026-10-01"
 
+# Only reachable on the custom domain (join.larrikincoffeecollective.com.au), not on *.workers.dev.
+workers_dev = false
+
 # Only the join form on the live site (and optionally local dev) may call this Worker.
 [vars]
 ALLOWED_ORIGIN = "https://larrikincoffeecollective.com.au"
