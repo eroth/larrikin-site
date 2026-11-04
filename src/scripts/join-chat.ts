@@ -1,5 +1,7 @@
 // A messaging-style join form: one question at a time, answered in chat bubbles.
 // With no endpoint configured (local preview) it simulates sending and posts nothing.
+import { settleTurnstile } from './turnstile-after-send.mjs';
+
 const root = document.getElementById('join-chat');
 
 if (root) {
@@ -149,9 +151,10 @@ if (root) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...answers, website: honeypot.value, turnstileToken }),
         });
-        // A Turnstile token works once, so ask for a fresh one whatever happened.
+        // A Turnstile token works once: a failed send gets a fresh challenge for a retry, a
+        // successful one removes the widget so no stray "Verify you are human" box appears.
         token = '';
-        if (widgetId !== undefined) turnstile().reset(widgetId);
+        widgetId = settleTurnstile(turnstile(), widgetId, res.ok);
         if (!res.ok) throw new Error(String(res.status));
       } else {
         await pause(600);
